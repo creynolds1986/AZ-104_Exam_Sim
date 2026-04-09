@@ -4,6 +4,8 @@ A comprehensive practice exam tool for the Microsoft Azure Administrator (AZ-104
 
 ![AZ-104 Exam Simulator](screenshots/preview.png)
 
+![Exam History](screenshots/history.png)
+
 ## Features
 
 - **~800 Exam Questions** - 10+ questions per bullet point covering all AZ-104 exam objectives
