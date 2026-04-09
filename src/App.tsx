@@ -8,6 +8,22 @@ import ExamReview from './components/ExamReview';
 import History from './components/History';
 import HistoryDetail from './components/HistoryDetail';
 
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function parseWeight(weight: string): number {
+  // Parse "20-25%" → midpoint 22.5
+  const match = weight.match(/(\d+)-(\d+)/);
+  if (match) return (parseInt(match[1]) + parseInt(match[2])) / 2;
+  return 15; // fallback
+}
+
 function App() {
   const [phase, setPhase] = useState<ExamPhase>('setup');
   const [examQuestions, setExamQuestions] = useState<Question[]>([]);
@@ -20,11 +36,42 @@ function App() {
 
   const startExam = useCallback((selectedSectionIds: string[], questionCount: number, timer: boolean, minutes: number) => {
     const allQuestions = getAllQuestions();
-    const filtered = allQuestions.filter(q => selectedSectionIds.includes(q.sectionId));
 
-    // Shuffle and pick
-    const shuffled = [...filtered].sort(() => Math.random() - 0.5);
-    const selected = shuffled.slice(0, Math.min(questionCount, shuffled.length));
+    // Group questions by section and calculate weighted distribution
+    const selectedSections = sections.filter(s => selectedSectionIds.includes(s.id));
+    const totalWeight = selectedSections.reduce((sum, s) => sum + parseWeight(s.weight), 0);
+
+    // Allocate question counts proportionally by weight
+    let remaining = questionCount;
+    const allocations: { sectionId: string; count: number }[] = [];
+    selectedSections.forEach((s, i) => {
+      const proportion = parseWeight(s.weight) / totalWeight;
+      const count = i === selectedSections.length - 1
+        ? remaining // last section gets the remainder to avoid rounding issues
+        : Math.round(questionCount * proportion);
+      allocations.push({ sectionId: s.id, count: Math.min(count, remaining) });
+      remaining -= allocations[allocations.length - 1].count;
+    });
+
+    // Select questions from each section using Fisher-Yates shuffle
+    let selected: Question[] = [];
+    for (const { sectionId, count } of allocations) {
+      const pool = allQuestions.filter(q => q.sectionId === sectionId);
+      const shuffled = shuffle(pool);
+      selected = selected.concat(shuffled.slice(0, Math.min(count, shuffled.length)));
+    }
+
+    // If we still need more questions (sections had fewer than allocated), backfill
+    if (selected.length < questionCount) {
+      const selectedIds = new Set(selected.map(q => q.id));
+      const remaining = allQuestions
+        .filter(q => selectedSectionIds.includes(q.sectionId) && !selectedIds.has(q.id));
+      const extra = shuffle(remaining).slice(0, questionCount - selected.length);
+      selected = selected.concat(extra);
+    }
+
+    // Final shuffle so questions aren't grouped by section
+    selected = shuffle(selected);
 
     setExamQuestions(selected);
     setUserAnswers(selected.map(q => ({ questionId: q.id, answer: null, flagged: false, timeSpent: 0 })));
