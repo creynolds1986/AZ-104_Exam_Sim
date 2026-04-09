@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { ExamPhase, Question, UserAnswer, AttemptSummary, AttemptDetail, SectionScore } from './types';
 import { sections } from './data/sections';
 import { getAllQuestions } from './data/questions';
@@ -33,6 +33,20 @@ function App() {
   const [timerMinutes, setTimerMinutes] = useState(150);
   const [lastAttemptId, setLastAttemptId] = useState<number | null>(null);
   const [selectedAttemptId, setSelectedAttemptId] = useState<number | null>(null);
+
+  // Theme
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'light' || saved === 'dark') return saved;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => setTheme(t => t === 'light' ? 'dark' : 'light');
 
   const startExam = useCallback((selectedSectionIds: string[], questionCount: number, timer: boolean, minutes: number) => {
     const allQuestions = getAllQuestions();
@@ -147,6 +161,9 @@ function App() {
           </button>
           <button className={phase === 'history' || phase === 'history-detail' ? 'active' : ''} onClick={goToHistory}>
             History
+          </button>
+          <button className="theme-toggle" onClick={toggleTheme} title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}>
+            {theme === 'light' ? '\u263E' : '\u2600'}
           </button>
         </nav>
       </header>

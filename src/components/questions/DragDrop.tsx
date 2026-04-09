@@ -82,7 +82,7 @@ export default function DragDrop({ question, answer, onAnswer, reviewMode }: Pro
                 style={reviewMode ? {
                   borderStyle: 'solid',
                   borderColor: placedItemId === target.correctItemId ? 'var(--ms-green)' : 'var(--ms-red)',
-                  background: placedItemId === target.correctItemId ? '#dff6dd' : '#fde7e9',
+                  background: placedItemId === target.correctItemId ? 'var(--bg-success)' : 'var(--bg-error)',
                 } : undefined}
               >
                 <div className="drop-target-label">{target.label}</div>

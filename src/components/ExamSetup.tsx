@@ -44,10 +44,10 @@ export default function ExamSetup({ sections, onStart }: Props) {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
             <h3>Exam Sections</h3>
             <div style={{ display: 'flex', gap: 8 }}>
-              <button onClick={selectAll} style={{ fontSize: 13, color: '#0078d4', background: 'none', textDecoration: 'underline' }}>
+              <button onClick={selectAll} style={{ fontSize: 13, color: 'var(--ms-blue)', background: 'none', textDecoration: 'underline' }}>
                 Select All
               </button>
-              <button onClick={selectNone} style={{ fontSize: 13, color: '#0078d4', background: 'none', textDecoration: 'underline' }}>
+              <button onClick={selectNone} style={{ fontSize: 13, color: 'var(--ms-blue)', background: 'none', textDecoration: 'underline' }}>
                 Clear All
               </button>
             </div>
@@ -64,7 +64,7 @@ export default function ExamSetup({ sections, onStart }: Props) {
                 />
                 <span className="section-title">{section.title}</span>
                 <span className="section-weight">{section.weight}</span>
-                <span style={{ fontSize: 12, color: '#a19f9d', transition: 'transform 0.2s', transform: expanded.has(section.id) ? 'rotate(180deg)' : 'rotate(0)' }}>
+                <span style={{ fontSize: 12, color: 'var(--text-muted)', transition: 'transform 0.2s', transform: expanded.has(section.id) ? 'rotate(180deg)' : 'rotate(0)' }}>
                   ▼
                 </span>
               </div>
@@ -72,7 +72,7 @@ export default function ExamSetup({ sections, onStart }: Props) {
                 <ul className="section-subsections">
                   {section.subsections.map(sub => (
                     <React.Fragment key={sub.id}>
-                      <li style={{ fontWeight: 600, color: '#323130', listStyle: 'none', marginTop: 8 }}>{sub.title}</li>
+                      <li style={{ fontWeight: 600, color: 'var(--text-primary)', listStyle: 'none', marginTop: 8 }}>{sub.title}</li>
                       {sub.bulletPoints.map((bp, i) => (
                         <li key={i}>{bp}</li>
                       ))}
@@ -103,7 +103,7 @@ export default function ExamSetup({ sections, onStart }: Props) {
                 type="checkbox"
                 checked={timerEnabled}
                 onChange={e => setTimerEnabled(e.target.checked)}
-                style={{ width: 18, height: 18, accentColor: '#0078d4' }}
+                style={{ width: 18, height: 18, accentColor: 'var(--ms-blue)' }}
               />
               <select
                 value={timerMinutes}

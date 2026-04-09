@@ -142,7 +142,7 @@ export default function ExamRunner({ questions, initialAnswers, timerEnabled, ti
           >
             ← Previous
           </button>
-          <span style={{ color: '#a19f9d', fontSize: 13 }}>
+          <span style={{ color: 'var(--text-muted)', fontSize: 13 }}>
             Question {currentIndex + 1} of {questions.length}
           </span>
           <button

@@ -11,23 +11,81 @@
   --ms-green: #107c10;
   --ms-red: #d13438;
   --ms-orange: #ff8c00;
-  --ms-gray-10: #faf9f8;
-  --ms-gray-20: #f3f2f1;
-  --ms-gray-30: #edebe9;
-  --ms-gray-40: #d2d0ce;
-  --ms-gray-60: #a19f9d;
-  --ms-gray-90: #605e5c;
-  --ms-gray-130: #323130;
-  --ms-gray-150: #201f1e;
   --ms-font: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
   --sidebar-width: 280px;
+
+  /* Semantic tokens — light theme */
+  --bg-page: #faf9f8;
+  --bg-surface: #ffffff;
+  --bg-surface-secondary: #f3f2f1;
+  --bg-surface-tertiary: #edebe9;
+  --bg-header: #201f1e;
+  --bg-hover: #faf9f8;
+  --text-primary: #323130;
+  --text-secondary: #605e5c;
+  --text-muted: #a19f9d;
+  --text-on-header: #cccccc;
+  --border-default: #edebe9;
+  --border-strong: #d2d0ce;
+  --shadow-card: rgba(0,0,0,0.04);
+  --shadow-elevated: rgba(0,0,0,0.2);
+  --overlay-bg: rgba(0,0,0,0.4);
+  --header-btn-hover: rgba(255,255,255,0.1);
+  --drag-shadow: rgba(0,0,0,0.1);
+
+  /* Status backgrounds */
+  --bg-success: #dff6dd;
+  --bg-error: #fde7e9;
+  --bg-warning: #fff4ce;
+  --bg-info: #eff6fc;
+  --red-hover: #b52e31;
+
+  /* Input */
+  --input-bg: #ffffff;
+}
+
+[data-theme="dark"] {
+  --ms-blue: #4da6ff;
+  --ms-blue-dark: #6db8ff;
+  --ms-blue-light: #1a3a5c;
+  --ms-green: #4caf50;
+  --ms-red: #ef5350;
+  --ms-orange: #ffb74d;
+
+  --bg-page: #1a1a1a;
+  --bg-surface: #2d2d2d;
+  --bg-surface-secondary: #383838;
+  --bg-surface-tertiary: #424242;
+  --bg-header: #111111;
+  --bg-hover: #383838;
+  --text-primary: #e0e0e0;
+  --text-secondary: #b0b0b0;
+  --text-muted: #808080;
+  --text-on-header: #b0b0b0;
+  --border-default: #424242;
+  --border-strong: #555555;
+  --shadow-card: rgba(0,0,0,0.2);
+  --shadow-elevated: rgba(0,0,0,0.5);
+  --overlay-bg: rgba(0,0,0,0.6);
+  --header-btn-hover: rgba(255,255,255,0.15);
+  --drag-shadow: rgba(0,0,0,0.3);
+
+  --bg-success: #1b3a1b;
+  --bg-error: #3d1a1a;
+  --bg-warning: #3d3015;
+  --bg-info: #1a2a3d;
+  --red-hover: #c62828;
+
+  --input-bg: #383838;
+
+  color-scheme: dark;
 }
 
 body {
   font-family: var(--ms-font);
   font-size: 14px;
-  color: var(--ms-gray-130);
-  background: var(--ms-gray-10);
+  color: var(--text-primary);
+  background: var(--bg-page);
   line-height: 1.5;
 }
 
@@ -56,7 +114,7 @@ input, select {
 }
 
 .app-header {
-  background: var(--ms-gray-150);
+  background: var(--bg-header);
   color: white;
   padding: 0 24px;
   height: 48px;
@@ -79,7 +137,7 @@ input, select {
 
 .app-header nav button {
   background: transparent;
-  color: #ccc;
+  color: var(--text-on-header);
   padding: 6px 16px;
   border-radius: 4px;
   font-size: 14px;
@@ -87,7 +145,7 @@ input, select {
 }
 
 .app-header nav button:hover {
-  background: rgba(255,255,255,0.1);
+  background: var(--header-btn-hover);
   color: white;
 }
 
@@ -111,22 +169,22 @@ input, select {
 }
 
 .setup-card {
-  background: white;
-  border: 1px solid var(--ms-gray-30);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
   border-radius: 8px;
   padding: 32px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+  box-shadow: 0 2px 4px var(--shadow-card);
 }
 
 .setup-card h2 {
   font-size: 24px;
   font-weight: 600;
   margin-bottom: 8px;
-  color: var(--ms-gray-150);
+  color: var(--text-primary);
 }
 
 .setup-card .subtitle {
-  color: var(--ms-gray-90);
+  color: var(--text-secondary);
   margin-bottom: 24px;
 }
 
@@ -141,7 +199,7 @@ input, select {
 }
 
 .section-item {
-  border: 1px solid var(--ms-gray-30);
+  border: 1px solid var(--border-default);
   border-radius: 6px;
   margin-bottom: 8px;
   overflow: hidden;
@@ -152,13 +210,13 @@ input, select {
   align-items: center;
   padding: 12px 16px;
   gap: 12px;
-  background: white;
+  background: var(--bg-surface);
   cursor: pointer;
   transition: background 0.15s;
 }
 
 .section-header:hover {
-  background: var(--ms-gray-10);
+  background: var(--bg-hover);
 }
 
 .section-header input[type="checkbox"] {
@@ -175,9 +233,9 @@ input, select {
 }
 
 .section-header .section-weight {
-  color: var(--ms-gray-90);
+  color: var(--text-secondary);
   font-size: 13px;
-  background: var(--ms-gray-20);
+  background: var(--bg-surface-secondary);
   padding: 2px 8px;
   border-radius: 4px;
 }
@@ -185,7 +243,7 @@ input, select {
 .section-subsections {
   padding: 0 16px 12px 46px;
   font-size: 13px;
-  color: var(--ms-gray-90);
+  color: var(--text-secondary);
 }
 
 .section-subsections li {
@@ -210,7 +268,7 @@ input, select {
 .option-group label {
   font-weight: 600;
   font-size: 13px;
-  color: var(--ms-gray-90);
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -218,9 +276,10 @@ input, select {
 .option-group select,
 .option-group input {
   padding: 8px 12px;
-  border: 1px solid var(--ms-gray-40);
+  border: 1px solid var(--border-strong);
   border-radius: 4px;
-  background: white;
+  background: var(--input-bg);
+  color: var(--text-primary);
 }
 
 .option-group select:focus,
@@ -245,8 +304,8 @@ input, select {
 }
 
 .start-btn:disabled {
-  background: var(--ms-gray-40);
-  color: var(--ms-gray-60);
+  background: var(--border-strong);
+  color: var(--text-muted);
   cursor: not-allowed;
 }
 
@@ -259,8 +318,8 @@ input, select {
 
 .exam-sidebar {
   width: var(--sidebar-width);
-  background: white;
-  border-right: 1px solid var(--ms-gray-30);
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-default);
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -268,7 +327,7 @@ input, select {
 
 .exam-sidebar-header {
   padding: 16px;
-  border-bottom: 1px solid var(--ms-gray-30);
+  border-bottom: 1px solid var(--border-default);
 }
 
 .exam-timer {
@@ -278,22 +337,22 @@ input, select {
   text-align: center;
   padding: 8px;
   border-radius: 6px;
-  background: var(--ms-gray-10);
+  background: var(--bg-hover);
 }
 
 .exam-timer.warning {
   color: var(--ms-orange);
-  background: #fff4ce;
+  background: var(--bg-warning);
 }
 
 .exam-timer.critical {
   color: var(--ms-red);
-  background: #fde7e9;
+  background: var(--bg-error);
 }
 
 .exam-progress {
   font-size: 13px;
-  color: var(--ms-gray-90);
+  color: var(--text-secondary);
   text-align: center;
   margin-top: 8px;
 }
@@ -316,12 +375,12 @@ input, select {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid var(--ms-gray-30);
+  border: 2px solid var(--border-default);
   border-radius: 6px;
   font-size: 13px;
   font-weight: 600;
-  background: white;
-  color: var(--ms-gray-130);
+  background: var(--bg-surface);
+  color: var(--text-primary);
   transition: all 0.15s;
 }
 
@@ -368,7 +427,7 @@ input, select {
 }
 
 .sidebar-end-btn:hover {
-  background: #b52e31;
+  background: var(--red-hover);
 }
 
 /* Question Area */
@@ -395,7 +454,7 @@ input, select {
 .question-number {
   font-size: 13px;
   font-weight: 600;
-  color: var(--ms-gray-90);
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -418,9 +477,9 @@ input, select {
   padding: 6px 12px;
   border-radius: 4px;
   background: transparent;
-  color: var(--ms-gray-90);
+  color: var(--text-secondary);
   font-size: 13px;
-  border: 1px solid var(--ms-gray-40);
+  border: 1px solid var(--border-strong);
   transition: all 0.15s;
 }
 
@@ -430,7 +489,7 @@ input, select {
 }
 
 .flag-btn.flagged {
-  background: #fff4ce;
+  background: var(--bg-warning);
   border-color: var(--ms-orange);
   color: var(--ms-orange);
 }
@@ -454,16 +513,16 @@ input, select {
   align-items: flex-start;
   gap: 12px;
   padding: 12px 16px;
-  border: 2px solid var(--ms-gray-30);
+  border: 2px solid var(--border-default);
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.15s;
-  background: white;
+  background: var(--bg-surface);
 }
 
 .option-item:hover {
   border-color: var(--ms-blue);
-  background: var(--ms-gray-10);
+  background: var(--bg-hover);
 }
 
 .option-item.selected {
@@ -473,12 +532,12 @@ input, select {
 
 .option-item.correct {
   border-color: var(--ms-green);
-  background: #dff6dd;
+  background: var(--bg-success);
 }
 
 .option-item.incorrect {
   border-color: var(--ms-red);
-  background: #fde7e9;
+  background: var(--bg-error);
 }
 
 .option-letter {
@@ -488,7 +547,7 @@ input, select {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  border: 2px solid var(--ms-gray-40);
+  border: 2px solid var(--border-strong);
   font-weight: 600;
   font-size: 13px;
   flex-shrink: 0;
@@ -535,15 +594,15 @@ input, select {
   font-size: 13px;
   font-weight: 600;
   text-transform: uppercase;
-  color: var(--ms-gray-90);
+  color: var(--text-secondary);
   margin-bottom: 12px;
   letter-spacing: 0.5px;
 }
 
 .drag-item {
   padding: 10px 14px;
-  background: white;
-  border: 2px solid var(--ms-gray-40);
+  background: var(--bg-surface);
+  border: 2px solid var(--border-strong);
   border-radius: 6px;
   margin-bottom: 8px;
   cursor: grab;
@@ -553,7 +612,7 @@ input, select {
 
 .drag-item:hover {
   border-color: var(--ms-blue);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px var(--drag-shadow);
 }
 
 .drag-item.dragging {
@@ -567,7 +626,7 @@ input, select {
 
 .drop-target {
   padding: 12px 14px;
-  border: 2px dashed var(--ms-gray-40);
+  border: 2px dashed var(--border-strong);
   border-radius: 6px;
   margin-bottom: 8px;
   min-height: 48px;
@@ -607,7 +666,7 @@ input, select {
 }
 
 .drop-target-placeholder {
-  color: var(--ms-gray-60);
+  color: var(--text-muted);
   font-size: 13px;
   font-style: italic;
 }
@@ -630,12 +689,12 @@ input, select {
 
 .dropdown-segment select.correct {
   border-color: var(--ms-green);
-  background: #dff6dd;
+  background: var(--bg-success);
 }
 
 .dropdown-segment select.incorrect {
   border-color: var(--ms-red);
-  background: #fde7e9;
+  background: var(--bg-error);
 }
 
 /* Yes/No */
@@ -644,7 +703,7 @@ input, select {
   line-height: 1.6;
   margin-bottom: 24px;
   padding: 16px;
-  background: var(--ms-gray-10);
+  background: var(--bg-hover);
   border-radius: 6px;
   border-left: 4px solid var(--ms-blue);
   white-space: pre-wrap;
@@ -658,11 +717,11 @@ input, select {
 .yesno-table th {
   text-align: center;
   padding: 10px 16px;
-  background: var(--ms-gray-20);
-  border: 1px solid var(--ms-gray-30);
+  background: var(--bg-surface-secondary);
+  border: 1px solid var(--border-default);
   font-size: 13px;
   font-weight: 600;
-  color: var(--ms-gray-90);
+  color: var(--text-secondary);
 }
 
 .yesno-table th:first-child {
@@ -672,7 +731,7 @@ input, select {
 
 .yesno-table td {
   padding: 12px 16px;
-  border: 1px solid var(--ms-gray-30);
+  border: 1px solid var(--border-default);
   vertical-align: middle;
 }
 
@@ -681,7 +740,7 @@ input, select {
 }
 
 .yesno-table tr:hover {
-  background: var(--ms-gray-10);
+  background: var(--bg-hover);
 }
 
 .yesno-radio {
@@ -692,11 +751,11 @@ input, select {
 }
 
 .yesno-table tr.correct-row {
-  background: #dff6dd;
+  background: var(--bg-success);
 }
 
 .yesno-table tr.incorrect-row {
-  background: #fde7e9;
+  background: var(--bg-error);
 }
 
 /* Case Study */
@@ -705,8 +764,8 @@ input, select {
   line-height: 1.7;
   margin-bottom: 24px;
   padding: 20px;
-  background: var(--ms-gray-10);
-  border: 1px solid var(--ms-gray-30);
+  background: var(--bg-hover);
+  border: 1px solid var(--border-default);
   border-radius: 6px;
   white-space: pre-wrap;
   max-height: 300px;
@@ -717,13 +776,13 @@ input, select {
   display: flex;
   gap: 2px;
   margin-bottom: 20px;
-  border-bottom: 2px solid var(--ms-gray-30);
+  border-bottom: 2px solid var(--border-default);
 }
 
 .case-study-tab {
   padding: 8px 16px;
-  background: var(--ms-gray-20);
-  color: var(--ms-gray-90);
+  background: var(--bg-surface-secondary);
+  color: var(--text-secondary);
   font-size: 13px;
   font-weight: 600;
   border-radius: 4px 4px 0 0;
@@ -736,7 +795,7 @@ input, select {
 }
 
 .case-study-tab:hover:not(.active) {
-  background: var(--ms-gray-30);
+  background: var(--bg-surface-tertiary);
 }
 
 /* Exam Bottom Bar */
@@ -745,8 +804,8 @@ input, select {
   align-items: center;
   justify-content: space-between;
   padding: 12px 40px;
-  background: white;
-  border-top: 1px solid var(--ms-gray-30);
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-default);
 }
 
 .nav-btn {
@@ -754,11 +813,11 @@ input, select {
   align-items: center;
   gap: 8px;
   padding: 10px 20px;
-  background: white;
-  border: 1px solid var(--ms-gray-40);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
   border-radius: 6px;
   font-weight: 600;
-  color: var(--ms-gray-130);
+  color: var(--text-primary);
   transition: all 0.15s;
 }
 
@@ -781,8 +840,8 @@ input, select {
 }
 
 .score-card {
-  background: white;
-  border: 1px solid var(--ms-gray-30);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
   border-radius: 8px;
   padding: 32px;
   text-align: center;
@@ -810,7 +869,7 @@ input, select {
 }
 
 .score-detail {
-  color: var(--ms-gray-90);
+  color: var(--text-secondary);
   font-size: 14px;
 }
 
@@ -824,19 +883,19 @@ input, select {
 }
 
 .pass-badge.pass {
-  background: #dff6dd;
+  background: var(--bg-success);
   color: var(--ms-green);
 }
 
 .pass-badge.fail {
-  background: #fde7e9;
+  background: var(--bg-error);
   color: var(--ms-red);
 }
 
 /* Section Breakdown */
 .section-breakdown {
-  background: white;
-  border: 1px solid var(--ms-gray-30);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
   border-radius: 8px;
   padding: 24px;
   margin-bottom: 24px;
@@ -861,7 +920,7 @@ input, select {
 
 .breakdown-track {
   height: 8px;
-  background: var(--ms-gray-20);
+  background: var(--bg-surface-secondary);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -882,8 +941,8 @@ input, select {
 
 /* Question Review */
 .review-question {
-  background: white;
-  border: 1px solid var(--ms-gray-30);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
   border-radius: 8px;
   padding: 24px;
   margin-bottom: 16px;
@@ -919,7 +978,7 @@ input, select {
 .explanation-box {
   margin-top: 16px;
   padding: 12px 16px;
-  background: #eff6fc;
+  background: var(--bg-info);
   border-left: 4px solid var(--ms-blue);
   border-radius: 4px;
   font-size: 13px;
@@ -937,8 +996,8 @@ input, select {
 .history-table {
   width: 100%;
   border-collapse: collapse;
-  background: white;
-  border: 1px solid var(--ms-gray-30);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
   border-radius: 8px;
   overflow: hidden;
 }
@@ -946,16 +1005,16 @@ input, select {
 .history-table th {
   padding: 12px 16px;
   text-align: left;
-  background: var(--ms-gray-20);
+  background: var(--bg-surface-secondary);
   font-size: 13px;
   font-weight: 600;
-  color: var(--ms-gray-90);
-  border-bottom: 1px solid var(--ms-gray-30);
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-default);
 }
 
 .history-table td {
   padding: 12px 16px;
-  border-bottom: 1px solid var(--ms-gray-30);
+  border-bottom: 1px solid var(--border-default);
   font-size: 14px;
 }
 
@@ -969,7 +1028,7 @@ input, select {
 }
 
 .history-table tbody tr:hover {
-  background: var(--ms-gray-10);
+  background: var(--bg-hover);
 }
 
 .status-pass {
@@ -986,7 +1045,7 @@ input, select {
 .confirm-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: var(--overlay-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -994,12 +1053,12 @@ input, select {
 }
 
 .confirm-dialog {
-  background: white;
+  background: var(--bg-surface);
   border-radius: 8px;
   padding: 32px;
   max-width: 400px;
   width: 90%;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 32px var(--shadow-elevated);
 }
 
 .confirm-dialog h3 {
@@ -1008,7 +1067,7 @@ input, select {
 }
 
 .confirm-dialog p {
-  color: var(--ms-gray-90);
+  color: var(--text-secondary);
   margin-bottom: 24px;
 }
 
@@ -1025,8 +1084,8 @@ input, select {
 }
 
 .btn-cancel {
-  background: var(--ms-gray-20);
-  color: var(--ms-gray-130);
+  background: var(--bg-surface-secondary);
+  color: var(--text-primary);
 }
 
 .btn-confirm {
@@ -1047,19 +1106,19 @@ input, select {
 .empty-state {
   text-align: center;
   padding: 60px 24px;
-  color: var(--ms-gray-60);
+  color: var(--text-muted);
 }
 
 .empty-state h3 {
   font-size: 18px;
   margin-bottom: 8px;
-  color: var(--ms-gray-90);
+  color: var(--text-secondary);
 }
 
 /* Score trend chart */
 .trend-chart {
-  background: white;
-  border: 1px solid var(--ms-gray-30);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-default);
   border-radius: 8px;
   padding: 24px;
   margin-bottom: 24px;
@@ -1074,6 +1133,22 @@ input, select {
 .trend-svg {
   width: 100%;
   height: 200px;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+  background: transparent;
+  color: var(--text-on-header);
+  font-size: 18px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.15s;
+  line-height: 1;
+}
+
+.theme-toggle:hover {
+  background: var(--header-btn-hover);
+  color: white;
 }
 
 /* Responsive */
