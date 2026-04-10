@@ -1,5 +1,6 @@
 import React from 'react';
 import { Question } from '../types';
+import { learnLinks } from '../data/learnLinks';
 import SingleChoice from './questions/SingleChoice';
 import MultipleChoice from './questions/MultipleChoice';
 import DragDrop from './questions/DragDrop';
@@ -65,6 +66,13 @@ export default function QuestionDisplay({
       {reviewMode && question.explanation && (
         <div className="explanation-box">
           <strong>Explanation:</strong> {question.explanation}
+          {learnLinks[question.bulletPoint] && (
+            <div className="learn-link">
+              <a href={learnLinks[question.bulletPoint]} target="_blank" rel="noopener noreferrer">
+                Learn more: {question.bulletPoint}
+              </a>
+            </div>
+          )}
         </div>
       )}
     </div>

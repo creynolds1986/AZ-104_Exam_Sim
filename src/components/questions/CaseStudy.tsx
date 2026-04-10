@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { CaseStudyQuestion, CaseStudySubQuestion } from '../../types';
+import { learnLinks } from '../../data/learnLinks';
 
 interface Props {
   question: CaseStudyQuestion;
@@ -208,6 +209,13 @@ export default function CaseStudy({ question, answer, onAnswer, reviewMode }: Pr
       {reviewMode && question.subQuestions[activeTab].explanation && (
         <div className="explanation-box" style={{ marginTop: 16 }}>
           <strong>Explanation:</strong> {question.subQuestions[activeTab].explanation}
+          {learnLinks[question.bulletPoint] && (
+            <div className="learn-link">
+              <a href={learnLinks[question.bulletPoint]} target="_blank" rel="noopener noreferrer">
+                Learn more: {question.bulletPoint}
+              </a>
+            </div>
+          )}
         </div>
       )}
     </div>
