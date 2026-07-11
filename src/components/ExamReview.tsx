@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Question, UserAnswer, Section, SectionScore } from '../types';
 import QuestionDisplay from './QuestionDisplay';
 
@@ -13,19 +13,43 @@ interface Props {
 export default function ExamReview({ questions, answers, sections, onNewExam, onViewHistory }: Props) {
   const [showQuestions, setShowQuestions] = useState(false);
   const [reviewIndex, setReviewIndex] = useState(0);
+  const [showIncorrectOnly, setShowIncorrectOnly] = useState(false);
+
+  const questionResults = useMemo(() => {
+    return questions.map((q, i) => ({
+      question: q,
+      index: i,
+      correct: isAnswerCorrect(q, answers[i]?.answer),
+    }));
+  }, [questions, answers]);
+
+  const filteredQuestionResults = useMemo(
+    () => (showIncorrectOnly ? questionResults.filter(result => !result.correct) : questionResults),
+    [questionResults, showIncorrectOnly],
+  );
+
+  const visibleQuestionIndices = useMemo(
+    () => filteredQuestionResults.map(result => result.index),
+    [filteredQuestionResults],
+  );
+
+  React.useEffect(() => {
+    if (showQuestions && showIncorrectOnly && visibleQuestionIndices.length > 0 && !visibleQuestionIndices.includes(reviewIndex)) {
+      setReviewIndex(visibleQuestionIndices[0]);
+    }
+  }, [showQuestions, showIncorrectOnly, visibleQuestionIndices, reviewIndex]);
 
   const results = useMemo(() => {
     let correct = 0;
     const sectionMap = new Map<string, { correct: number; total: number }>();
 
-    questions.forEach((q, i) => {
-      const isCorrect = isAnswerCorrect(q, answers[i]?.answer);
+    questionResults.forEach(({ question, correct: isCorrect }) => {
       if (isCorrect) correct++;
 
-      const entry = sectionMap.get(q.sectionId) || { correct: 0, total: 0 };
+      const entry = sectionMap.get(question.sectionId) || { correct: 0, total: 0 };
       entry.total++;
       if (isCorrect) entry.correct++;
-      sectionMap.set(q.sectionId, entry);
+      sectionMap.set(question.sectionId, entry);
     });
 
     const scorePercent = Math.round((correct / questions.length) * 100);
@@ -46,15 +70,32 @@ export default function ExamReview({ questions, answers, sections, onNewExam, on
       });
 
     return { correct, total: questions.length, scorePercent, scaledScore, passed, sectionScores };
-  }, [questions, answers, sections]);
+  }, [questionResults, questions.length, sections]);
 
   if (showQuestions) {
     const q = questions[reviewIndex];
     const a = answers[reviewIndex];
+    const currentIndex = visibleQuestionIndices.indexOf(reviewIndex);
+    const canPrev = currentIndex > 0;
+    const canNext = currentIndex < visibleQuestionIndices.length - 1;
+
     return (
       <div className="review-container">
-        <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
+        <div style={{ display: 'flex', gap: 12, marginBottom: 16, alignItems: 'center' }}>
           <button className="nav-btn" onClick={() => setShowQuestions(false)}>← Back to Summary</button>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <input
+              type="checkbox"
+              checked={showIncorrectOnly}
+              onChange={e => {
+                setShowIncorrectOnly(e.target.checked);
+                if (e.target.checked && visibleQuestionIndices.length > 0) {
+                  setReviewIndex(visibleQuestionIndices[0]);
+                }
+              }}
+            />
+            Review incorrect questions only
+          </label>
         </div>
         <div className="review-question">
           <div className="review-question-header">
@@ -75,10 +116,10 @@ export default function ExamReview({ questions, answers, sections, onNewExam, on
           />
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 16 }}>
-          <button className="nav-btn" disabled={reviewIndex === 0} onClick={() => setReviewIndex(reviewIndex - 1)}>
+          <button className="nav-btn" disabled={!canPrev} onClick={() => setReviewIndex(visibleQuestionIndices[currentIndex - 1])}>
             ← Previous
           </button>
-          <button className="nav-btn" disabled={reviewIndex === questions.length - 1} onClick={() => setReviewIndex(reviewIndex + 1)}>
+          <button className="nav-btn" disabled={!canNext} onClick={() => setReviewIndex(visibleQuestionIndices[currentIndex + 1])}>
             Next →
           </button>
         </div>
@@ -122,44 +163,50 @@ export default function ExamReview({ questions, answers, sections, onNewExam, on
         ))}
       </div>
 
-      <div style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
+      <div style={{ display: 'flex', gap: 12, marginBottom: 24, flexWrap: 'wrap' }}>
         <button className="nav-btn btn-primary" onClick={() => setShowQuestions(true)}>
           Review All Questions
+        </button>
+        <button className="nav-btn" onClick={() => { setShowQuestions(true); setShowIncorrectOnly(true); if (visibleQuestionIndices.length > 0) setReviewIndex(visibleQuestionIndices[0]); }}>
+          Review Incorrect Questions Only
         </button>
         <button className="nav-btn" onClick={onNewExam}>New Exam</button>
         <button className="nav-btn" onClick={onViewHistory}>View History</button>
       </div>
 
-      {/* Quick overview of all questions */}
+      {/* Questions grouped by section */}
       <div className="section-breakdown">
-        <h3>Question Overview</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(36px, 1fr))', gap: 6 }}>
-          {questions.map((q, i) => {
-            const correct = isAnswerCorrect(q, answers[i]?.answer);
-            return (
-              <button
-                key={i}
-                onClick={() => { setReviewIndex(i); setShowQuestions(true); }}
-                style={{
-                  width: '100%',
-                  aspectRatio: '1',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 4,
-                  border: 'none',
-                  fontSize: 12,
-                  fontWeight: 600,
-                  color: 'white',
-                  background: correct ? 'var(--ms-green)' : 'var(--ms-red)',
-                  cursor: 'pointer',
-                }}
-              >
-                {i + 1}
-              </button>
-            );
-          })}
-        </div>
+        <h3>Review Questions by Category</h3>
+        {sections.filter(s => questionResults.some(result => result.question.sectionId === s.id)).map(section => {
+          const sectionQuestionResults = questionResults.filter(result => result.question.sectionId === section.id);
+          return (
+            <div key={section.id} style={{ marginBottom: 16 }}>
+              <h4>{section.title}</h4>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                {sectionQuestionResults.map(({ question, index, correct }) => (
+                  <button
+                    key={question.id}
+                    onClick={() => { setReviewIndex(index); setShowQuestions(true); setShowIncorrectOnly(false); }}
+                    style={{
+                      width: 34,
+                      height: 34,
+                      borderRadius: 4,
+                      border: 'none',
+                      fontSize: 12,
+                      fontWeight: 600,
+                      color: 'white',
+                      background: correct ? 'var(--ms-green)' : 'var(--ms-red)',
+                      cursor: 'pointer',
+                    }}
+                    title={`${question.id} - ${correct ? 'Correct' : 'Incorrect'}`}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

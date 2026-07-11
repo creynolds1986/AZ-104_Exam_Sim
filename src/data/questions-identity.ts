@@ -1379,7 +1379,7 @@ export const identityGovernanceQuestions: Question[] = [
     subsectionId: 'manage-subscriptions',
     bulletPoint: 'Implement and manage Azure Policy',
     type: 'single-choice',
-    stem: 'You assign an Azure Policy with the "DeployIfNotExists" effect to ensure all virtual machines have the Azure Monitor agent installed. A VM is found to be non-compliant. What happens?',
+    stem: 'You assign an Azure Policy with the "DeployIfNotExists" effect to require the Azure Monitor agent on virtual machines. A VM already exists and is found to be non-compliant. What must you do to remediate that existing VM?',
     options: [
       { id: 'a', text: 'The VM is automatically deleted' },
       { id: 'b', text: 'A remediation task must be created to deploy the agent to existing non-compliant VMs' },

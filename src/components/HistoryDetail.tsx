@@ -13,6 +13,7 @@ export default function HistoryDetail({ attemptId, questions, sections, onBack }
   const [attempt, setAttempt] = useState<AttemptDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [reviewIndex, setReviewIndex] = useState<number | null>(null);
+  const [showIncorrectOnly, setShowIncorrectOnly] = useState(false);
 
   useEffect(() => {
     fetch(`/api/history/${attemptId}`)
@@ -20,6 +21,31 @@ export default function HistoryDetail({ attemptId, questions, sections, onBack }
       .then(data => { setAttempt(data); setLoading(false); })
       .catch(() => setLoading(false));
   }, [attemptId]);
+
+  const questionResults = React.useMemo(() => {
+    if (!attempt) return [];
+    return attempt.answers.map((answer, index) => ({
+      answer,
+      index,
+      correct: answer.isCorrect,
+    }));
+  }, [attempt]);
+
+  const filteredQuestionResults = React.useMemo(
+    () => (showIncorrectOnly ? questionResults.filter(result => !result.correct) : questionResults),
+    [questionResults, showIncorrectOnly],
+  );
+
+  const visibleQuestionIndices = React.useMemo(
+    () => filteredQuestionResults.map(result => result.index),
+    [filteredQuestionResults],
+  );
+
+  useEffect(() => {
+    if (reviewIndex !== null && showIncorrectOnly && visibleQuestionIndices.length > 0 && !visibleQuestionIndices.includes(reviewIndex)) {
+      setReviewIndex(visibleQuestionIndices[0]);
+    }
+  }, [reviewIndex, showIncorrectOnly, visibleQuestionIndices]);
 
   if (loading || !attempt) {
     return <div className="review-container"><p>Loading...</p></div>;
@@ -45,9 +71,28 @@ export default function HistoryDetail({ attemptId, questions, sections, onBack }
     const q = questions.find(q => q.id === ans.questionId);
     if (!q) return null;
 
+    const currentIndex = visibleQuestionIndices.indexOf(reviewIndex);
+    const canPrev = currentIndex > 0;
+    const canNext = currentIndex < visibleQuestionIndices.length - 1;
+
     return (
       <div className="review-container">
-        <button className="nav-btn" onClick={() => setReviewIndex(null)} style={{ marginBottom: 16 }}>← Back to Summary</button>
+        <div style={{ display: 'flex', gap: 12, marginBottom: 16, alignItems: 'center' }}>
+          <button className="nav-btn" onClick={() => setReviewIndex(null)}>← Back to Summary</button>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <input
+              type="checkbox"
+              checked={showIncorrectOnly}
+              onChange={e => {
+                setShowIncorrectOnly(e.target.checked);
+                if (e.target.checked && visibleQuestionIndices.length > 0) {
+                  setReviewIndex(visibleQuestionIndices[0]);
+                }
+              }}
+            />
+            Review incorrect questions only
+          </label>
+        </div>
         <div className="review-question">
           <div className="review-question-header">
             <span className={`review-badge ${ans.isCorrect ? 'correct' : 'incorrect'}`}>
@@ -67,8 +112,8 @@ export default function HistoryDetail({ attemptId, questions, sections, onBack }
           />
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 16 }}>
-          <button className="nav-btn" disabled={reviewIndex === 0} onClick={() => setReviewIndex(reviewIndex - 1)}>← Previous</button>
-          <button className="nav-btn" disabled={reviewIndex === attempt.answers.length - 1} onClick={() => setReviewIndex(reviewIndex + 1)}>Next →</button>
+          <button className="nav-btn" disabled={!canPrev} onClick={() => setReviewIndex(visibleQuestionIndices[currentIndex - 1])}>← Previous</button>
+          <button className="nav-btn" disabled={!canNext} onClick={() => setReviewIndex(visibleQuestionIndices[currentIndex + 1])}>Next →</button>
         </div>
       </div>
     );
@@ -103,6 +148,52 @@ export default function HistoryDetail({ attemptId, questions, sections, onBack }
             </div>
           </div>
         ))}
+      </div>
+
+      <div style={{ display: 'flex', gap: 12, marginBottom: 24, flexWrap: 'wrap' }}>
+        <button className="nav-btn btn-primary" onClick={() => { setReviewIndex(0); setShowIncorrectOnly(false); }}>
+          Review All Questions
+        </button>
+        <button className="nav-btn" onClick={() => {
+          setShowIncorrectOnly(true);
+          if (visibleQuestionIndices.length > 0) setReviewIndex(visibleQuestionIndices[0]);
+        }}>
+          Review Incorrect Questions Only
+        </button>
+      </div>
+
+      <div className="section-breakdown">
+        <h3>Review Questions by Category</h3>
+        {sections.filter(s => questionResults.some(result => result.answer.sectionId === s.id)).map(section => {
+          const sectionQuestionResults = questionResults.filter(result => result.answer.sectionId === section.id);
+          return (
+            <div key={section.id} style={{ marginBottom: 16 }}>
+              <h4>{section.title}</h4>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                {sectionQuestionResults.map(({ answer, index }) => (
+                  <button
+                    key={answer.questionId}
+                    onClick={() => { setReviewIndex(index); setShowIncorrectOnly(false); }}
+                    style={{
+                      width: 34,
+                      height: 34,
+                      borderRadius: 4,
+                      border: 'none',
+                      fontSize: 12,
+                      fontWeight: 600,
+                      color: 'white',
+                      background: answer.isCorrect ? 'var(--ms-green)' : 'var(--ms-red)',
+                      cursor: 'pointer',
+                    }}
+                    title={`${answer.questionId} - ${answer.isCorrect ? 'Correct' : 'Incorrect'}`}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       <div className="section-breakdown">
