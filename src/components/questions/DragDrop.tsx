@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { DragDropQuestion } from '../../types';
+import { shuffleDragDropLayout } from './dragDropLayout';
 
 interface Props {
   question: DragDropQuestion;
@@ -12,6 +13,10 @@ export default function DragDrop({ question, answer, onAnswer, reviewMode }: Pro
   const placements = answer || {};
   const [dragItem, setDragItem] = useState<string | null>(null);
   const [dragOverTarget, setDragOverTarget] = useState<string | null>(null);
+
+  const { items: shuffledItems, targets: shuffledTargets } = useMemo(() => {
+    return shuffleDragDropLayout(question.items, question.targets);
+  }, [question.id, question.items, question.targets]);
 
   const placedItemIds = new Set(Object.values(placements));
 
@@ -41,7 +46,7 @@ export default function DragDrop({ question, answer, onAnswer, reviewMode }: Pro
       <div className="drag-drop-container">
         <div className="drag-items">
           <h4>Items</h4>
-          {question.items.map(item => {
+          {shuffledItems.map(item => {
             const isPlaced = placedItemIds.has(item.id);
             return (
               <div
@@ -59,7 +64,7 @@ export default function DragDrop({ question, answer, onAnswer, reviewMode }: Pro
 
         <div className="drag-targets">
           <h4>Drop Targets</h4>
-          {question.targets.map(target => {
+          {shuffledTargets.map(target => {
             const placedItemId = placements[target.id];
             const placedItem = question.items.find(i => i.id === placedItemId);
             const isOver = dragOverTarget === target.id;
