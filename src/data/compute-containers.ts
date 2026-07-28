@@ -53,7 +53,7 @@ export const containerQuestions: Question[] = [
     ],
     correctOptionIds: ['a', 'b', 'c'],
     requiredSelections: 3,
-    explanation: 'Azure Container Registry supports authentication via: (1) Azure AD service principals with ACR role assignments (AcrPull, AcrPush, etc.), (2) the registry admin user (a single built-in account with username and two passwords that can be enabled on the registry), and (3) managed identities assigned ACR roles — commonly used for Azure services like ACI, AKS, and App Service. Individual Azure AD user identities via "az acr login" are also valid but option E is not among the three. SAS tokens (option D) are not a supported authentication mechanism for ACR; ACR uses its own token-based system distinct from storage SAS tokens.',
+    explanation: 'Azure Container Registry supports authentication via: (1) Azure AD service principals with ACR role assignments (AcrPull, AcrPush, etc.), (2) the registry admin user (a single built-in account with username and two passwords that can be enabled on the registry), and (3) managed identities assigned ACR roles — commonly used for Azure services like ACI and App Service. Individual Azure AD user identities via "az acr login" are also valid but option E is not among the three. SAS tokens (option D) are not a supported authentication mechanism for ACR; ACR uses its own token-based system distinct from storage SAS tokens.',
   },
 
   {
@@ -407,11 +407,11 @@ export const containerQuestions: Question[] = [
     options: [
       { id: 'a', text: 'It is a virtual machine scale set that runs the underlying container hosts' },
       { id: 'b', text: 'It is a shared boundary that provides networking, logging, and Dapr configuration for a group of container apps' },
-      { id: 'c', text: 'It is an Azure Kubernetes Service cluster that runs container apps workloads' },
+      { id: 'c', text: 'It is a container orchestration cluster that runs container apps workloads' },
       { id: 'd', text: 'It is a deployment slot that enables blue-green deployments for container apps' },
     ],
     correctOptionId: 'b',
-    explanation: 'An Azure Container Apps Environment is a secure boundary around one or more container apps that provides: shared virtual network integration (optionally), a shared Log Analytics workspace for logs, Dapr configuration and service discovery, and internal load balancing between apps. Multiple container apps within the same environment can communicate with each other using internal service names. The environment runs on a managed infrastructure (which uses AKS internally, but this is abstracted from users). It is not a VM scale set, not an exposed AKS cluster, and not a deployment slot.',
+    explanation: 'An Azure Container Apps Environment is a secure boundary around one or more container apps that provides shared virtual network integration, a shared Log Analytics workspace for logs, Dapr configuration and service discovery, and internal load balancing between apps. Multiple container apps within the same environment can communicate with each other using internal service names. The environment abstracts the hosted container infrastructure from the user; it is not a VM scale set and not a deployment slot.',
   },
 
   {
@@ -697,7 +697,7 @@ export const containerQuestions: Question[] = [
     sectionId: 'compute',
     subsectionId: 'containers',
     bulletPoint: 'Manage sizing and scaling for containers',
-    stem: 'You are managing an Azure Container Registry with a Standard SKU and have deployed container workloads to both Azure Container Instances and Azure Container Apps. Review each statement about container sizing and resource management and determine whether it is true.',
+    scenario: 'You are managing an Azure Container Registry with a Standard SKU and have deployed container workloads to both Azure Container Instances and Azure Container Apps. Review each statement about container sizing and resource management and determine whether it is true.',
     statements: [
       {
         id: 's1',

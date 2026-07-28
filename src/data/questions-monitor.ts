@@ -1187,7 +1187,7 @@ export const monitorMaintainQuestions: Question[] = [
       { id: 'd', text: 'Backup vault does not support encryption' },
     ],
     correctOptionId: 'a',
-    explanation: 'The primary difference is the supported datasource types. Backup vault was introduced to support newer workloads (Azure Blobs, Disks, PostgreSQL, AKS) while Recovery Services vault supports traditional workloads (Azure VMs, SQL Server, Azure Files, SAP HANA). Both vault types support similar security features.',
+    explanation: 'The primary difference is the supported datasource types. Backup vault was introduced to support newer workloads such as Azure Blobs, Disks, and PostgreSQL, while Recovery Services vault supports traditional workloads like Azure VMs, SQL Server, Azure Files, and SAP HANA. Both vault types support similar security features.',
   },
   {
     type: 'yes-no',
@@ -1274,22 +1274,7 @@ export const monitorMaintainQuestions: Question[] = [
   },
   {
     type: 'single-choice',
-    id: 'mm-078',
-    sectionId: 'monitor-maintain',
-    subsectionId: 'backup-recovery',
-    bulletPoint: 'Create an Azure Backup vault',
-    stem: 'You want to configure backup for Azure Kubernetes Service (AKS) clusters. Which type of vault do you need?',
-    options: [
-      { id: 'a', text: 'Backup vault' },
-      { id: 'b', text: 'Recovery Services vault' },
-      { id: 'c', text: 'Key Vault' },
-      { id: 'd', text: 'No vault is needed; AKS has built-in backup' },
-    ],
-    correctOptionId: 'a',
-    explanation: 'AKS backup uses a Backup vault. Azure Backup for AKS allows you to back up and restore containerized applications and their data. The Backup vault manages the backup policies and recovery points for AKS workloads.',
-  },
-  {
-    type: 'single-choice',
+    id: 'mm-079',
     id: 'mm-079',
     sectionId: 'monitor-maintain',
     subsectionId: 'backup-recovery',

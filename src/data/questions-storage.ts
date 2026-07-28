@@ -1783,20 +1783,6 @@ export const storageQuestions: Question[] = [
     explanation: 'To mount an Azure file share on Windows using the net use command, the UNC path follows the format \\\\<accountname>.file.core.windows.net\\<sharename>. The username is AZURE\\<storageaccountname> and the password is the storage account access key. Alternatively, you can use the Azure portal to generate the mount script automatically.'
   },
   {
-    type: 'yes-no',
-    id: 'st-109',
-    sectionId: 'storage',
-    subsectionId: 'configure-files-blob',
-    bulletPoint: 'Create and configure a file share in Azure Storage',
-    scenario: 'You are planning Azure Files deployments for different departments in your organization.',
-    statements: [
-      { id: 's1', text: 'An Azure NFS file share can be accessed from a Windows client.', correct: false },
-      { id: 's2', text: 'Azure file shares can be used as persistent volumes in Azure Kubernetes Service (AKS).', correct: true },
-      { id: 's3', text: 'Azure File Sync can synchronize an Azure file share with multiple on-premises Windows servers.', correct: true }
-    ],
-    explanation: 'Azure NFS file shares are only supported on Linux and macOS clients; Windows does not have native NFS 4.1 client support for Azure Files. Azure file shares can be mounted as persistent volumes in AKS using the Azure Files CSI driver. Azure File Sync can synchronize an Azure file share with multiple on-premises Windows Server endpoints, enabling cloud tiering and multi-site access.'
-  },
-  {
     type: 'single-choice',
     id: 'st-110',
     sectionId: 'storage',

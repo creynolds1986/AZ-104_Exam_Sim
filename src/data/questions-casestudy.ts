@@ -356,12 +356,12 @@ Technical requirements:
         stem: 'Select the appropriate Azure service for each microservice:',
         segments: [
           { type: 'text', text: 'The Product Catalog service (continuous, auto-scaling on HTTP) should run on ' },
-          { type: 'dropdown', id: 'd1', options: ['Azure Container Instances', 'Azure Container Apps', 'Azure Kubernetes Service', 'Azure App Service'], correctOption: 'Azure Container Apps' },
+          { type: 'dropdown', id: 'd1', options: ['Azure Container Instances', 'Azure Container Apps', 'Azure App Service'], correctOption: 'Azure Container Apps' },
           { type: 'text', text: '. The Order Processing batch job (hourly, pay only while running) should run on ' },
-          { type: 'dropdown', id: 'd2', options: ['Azure Container Instances', 'Azure Container Apps', 'Azure Kubernetes Service', 'Azure Functions'], correctOption: 'Azure Container Instances' },
+          { type: 'dropdown', id: 'd2', options: ['Azure Container Instances', 'Azure Container Apps', 'Azure Functions'], correctOption: 'Azure Container Instances' },
           { type: 'text', text: '.' },
         ],
-        explanation: 'Azure Container Apps is ideal for the Product Catalog — it supports HTTP-triggered auto-scaling, runs continuously, and is fully managed. Azure Container Instances is the best fit for the Order Processing batch job — it provides serverless containers that can be started on-demand (e.g., via a scheduled task), you pay only while the container runs, and it requires no infrastructure management. AKS would be over-engineered for these workloads.',
+        explanation: 'Azure Container Apps is ideal for the Product Catalog — it supports HTTP-triggered auto-scaling, runs continuously, and is fully managed. Azure Container Instances is the best fit for the Order Processing batch job — it provides serverless containers that can be started on-demand (e.g., via a scheduled task), you pay only while the container runs, and it requires no infrastructure management. A managed container platform would be over-engineered for these workloads.',
       },
       {
         id: 'cs-006-q3',
