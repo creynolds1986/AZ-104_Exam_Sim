@@ -127,4 +127,6 @@ export interface SectionScore {
   percent: number;
 }
 
+export type ExamMode = 'practice' | 'certificate';
+
 export type ExamPhase = 'setup' | 'running' | 'review' | 'history' | 'history-detail';

@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { ExamPhase, Question, UserAnswer, AttemptSummary, AttemptDetail, SectionScore } from './types';
+import { ExamPhase, ExamMode, Question, UserAnswer, AttemptSummary, AttemptDetail, SectionScore } from './types';
 import { sections } from './data/sections';
 import { getAllQuestions } from './data/questions';
 import ExamSetup from './components/ExamSetup';
@@ -31,6 +31,7 @@ function App() {
   const [examStartTime, setExamStartTime] = useState<string>('');
   const [timerEnabled, setTimerEnabled] = useState(true);
   const [timerMinutes, setTimerMinutes] = useState(150);
+  const [examMode, setExamMode] = useState<ExamMode>('certificate');
   const [lastAttemptId, setLastAttemptId] = useState<number | null>(null);
   const [selectedAttemptId, setSelectedAttemptId] = useState<number | null>(null);
 
@@ -48,7 +49,7 @@ function App() {
 
   const toggleTheme = () => setTheme(t => t === 'light' ? 'dark' : 'light');
 
-  const startExam = useCallback((selectedSectionIds: string[], questionCount: number, timer: boolean, minutes: number) => {
+  const startExam = useCallback((selectedSectionIds: string[], questionCount: number, timer: boolean, minutes: number, mode: ExamMode) => {
     const allQuestions = getAllQuestions();
 
     // Group questions by section and calculate weighted distribution
@@ -92,6 +93,7 @@ function App() {
     setExamStartTime(new Date().toISOString());
     setTimerEnabled(timer);
     setTimerMinutes(minutes);
+    setExamMode(mode);
     setPhase('running');
   }, []);
 
@@ -177,6 +179,7 @@ function App() {
             initialAnswers={userAnswers}
             timerEnabled={timerEnabled}
             timerMinutes={timerMinutes}
+            examMode={examMode}
             onSubmit={submitExam}
           />
         )}

@@ -7,9 +7,11 @@ interface Props {
   answer: Record<string, any> | null;
   onAnswer: (answer: Record<string, any>) => void;
   reviewMode: boolean;
+  showCorrect?: boolean;
+  showExplanation?: boolean;
 }
 
-export default function CaseStudy({ question, answer, onAnswer, reviewMode }: Props) {
+export default function CaseStudy({ question, answer, onAnswer, reviewMode, showCorrect, showExplanation }: Props) {
   const answers = answer || {};
   const [activeTab, setActiveTab] = useState(0);
 
@@ -30,10 +32,8 @@ export default function CaseStudy({ question, answer, onAnswer, reviewMode }: Pr
             {sq.options?.map((opt, i) => {
               let className = 'option-item';
               if (subAnswer === opt.id) className += ' selected';
-              if (reviewMode) {
-                if (opt.id === sq.correctOptionId) className += ' correct';
-                else if (subAnswer === opt.id && opt.id !== sq.correctOptionId) className += ' incorrect';
-              }
+              if ((reviewMode || (showCorrect && subAnswer !== null && subAnswer !== undefined)) && opt.id === sq.correctOptionId) className += ' correct';
+              else if ((reviewMode || (showCorrect && subAnswer !== null && subAnswer !== undefined)) && subAnswer === opt.id && opt.id !== sq.correctOptionId) className += ' incorrect';
               return (
                 <div key={opt.id} className={className} onClick={() => updateSubAnswer(sq.id, opt.id)}>
                   <span className="option-letter">{letters[i]}</span>
@@ -57,10 +57,8 @@ export default function CaseStudy({ question, answer, onAnswer, reviewMode }: Pr
             {sq.options?.map((opt, i) => {
               let className = 'option-item';
               if (selected.includes(opt.id)) className += ' selected';
-              if (reviewMode) {
-                if (sq.correctOptionIds?.includes(opt.id)) className += ' correct';
-                else if (selected.includes(opt.id)) className += ' incorrect';
-              }
+              if ((reviewMode || (showCorrect && selected.length > 0)) && sq.correctOptionIds?.includes(opt.id)) className += ' correct';
+              else if ((reviewMode || (showCorrect && selected.length > 0)) && selected.includes(opt.id)) className += ' incorrect';
               return (
                 <div
                   key={opt.id}
@@ -97,14 +95,15 @@ export default function CaseStudy({ question, answer, onAnswer, reviewMode }: Pr
               {sq.statements?.map(stmt => {
                 const sel = selections[stmt.id];
                 let rowClass = '';
-                if (reviewMode && sel !== undefined) {
+                const showAnswer = reviewMode || (showCorrect && sel !== undefined);
+                if (showAnswer) {
                   rowClass = sel === stmt.correct ? 'correct-row' : 'incorrect-row';
                 }
                 return (
                   <tr key={stmt.id} className={rowClass}>
                     <td>
                       {stmt.text}
-                      {reviewMode && sel !== stmt.correct && (
+                      {(reviewMode || (showCorrect && sel !== undefined)) && sel !== stmt.correct && (
                         <span style={{ fontSize: 12, color: 'var(--ms-green)', marginLeft: 8 }}>
                           (Correct: {stmt.correct ? 'Yes' : 'No'})
                         </span>
@@ -155,7 +154,7 @@ export default function CaseStudy({ question, answer, onAnswer, reviewMode }: Pr
               if (seg.type === 'text') return <span key={i}>{seg.text}</span>;
               const sel = selections[seg.id] || '';
               let selectClass = '';
-              if (reviewMode) {
+              if (reviewMode || (showCorrect && sel !== '')) {
                 selectClass = sel === seg.correctOption ? 'correct' : 'incorrect';
               }
               return (
@@ -206,7 +205,7 @@ export default function CaseStudy({ question, answer, onAnswer, reviewMode }: Pr
 
       {renderSubQuestion(question.subQuestions[activeTab], activeTab)}
 
-      {reviewMode && question.subQuestions[activeTab].explanation && (
+      {(reviewMode || showExplanation) && question.subQuestions[activeTab].explanation && (
         <div className="explanation-box" style={{ marginTop: 16 }}>
           <strong>Explanation:</strong> {question.subQuestions[activeTab].explanation}
           {learnLinks[question.bulletPoint] && (

@@ -6,9 +6,10 @@ interface Props {
   answer: Record<string, boolean> | null;
   onAnswer: (answer: Record<string, boolean>) => void;
   reviewMode: boolean;
+  showCorrect?: boolean;
 }
 
-export default function YesNoStatements({ question, answer, onAnswer, reviewMode }: Props) {
+export default function YesNoStatements({ question, answer, onAnswer, reviewMode, showCorrect }: Props) {
   const selections = answer || {};
 
   const handleSelect = (statementId: string, value: boolean) => {
@@ -31,7 +32,8 @@ export default function YesNoStatements({ question, answer, onAnswer, reviewMode
           {question.statements.map(stmt => {
             const selected = selections[stmt.id];
             let rowClass = '';
-            if (reviewMode && selected !== undefined) {
+            const showAnswer = reviewMode || (showCorrect && selected !== undefined);
+            if (showAnswer) {
               rowClass = selected === stmt.correct ? 'correct-row' : 'incorrect-row';
             }
 
@@ -39,7 +41,7 @@ export default function YesNoStatements({ question, answer, onAnswer, reviewMode
               <tr key={stmt.id} className={rowClass}>
                 <td>
                   {stmt.text}
-                  {reviewMode && selected !== stmt.correct && (
+                  {(reviewMode || (showCorrect && selected !== undefined)) && selected !== stmt.correct && (
                     <span style={{ fontSize: 12, color: 'var(--ms-green)', marginLeft: 8 }}>
                       (Correct: {stmt.correct ? 'Yes' : 'No'})
                     </span>

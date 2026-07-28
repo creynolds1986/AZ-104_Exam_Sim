@@ -494,6 +494,32 @@ input, select {
   color: var(--ms-orange);
 }
 
+.check-answer-panel {
+  margin-top: 18px;
+}
+
+.check-answer-btn {
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.check-answer-btn:hover:not(:disabled) {
+  border-color: var(--ms-orange);
+  color: var(--ms-orange);
+}
+
+.question-area.question-correct {
+  border: 1px solid var(--ms-green);
+  border-radius: 10px;
+  box-shadow: 0 0 0 1px rgba(16, 124, 16, 0.12);
+}
+
+.question-area.question-incorrect {
+  border: 1px solid var(--ms-red);
+  border-radius: 10px;
+  box-shadow: 0 0 0 1px rgba(209, 52, 56, 0.12);
+}
+
 .question-stem {
   font-size: 15px;
   line-height: 1.6;

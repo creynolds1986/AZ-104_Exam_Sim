@@ -17,7 +17,8 @@ interface Props {
   onAnswer: (answer: any) => void;
   onToggleFlag: () => void;
   reviewMode: boolean;
-  correctAnswer?: any;
+  showCorrect?: boolean;
+  showExplanation?: boolean;
 }
 
 const typeLabels: Record<string, string> = {
@@ -30,7 +31,7 @@ const typeLabels: Record<string, string> = {
 };
 
 export default function QuestionDisplay({
-  question, questionNumber, totalQuestions, answer, flagged, onAnswer, onToggleFlag, reviewMode, correctAnswer,
+  question, questionNumber, totalQuestions, answer, flagged, onAnswer, onToggleFlag, reviewMode, showCorrect, showExplanation,
 }: Props) {
   return (
     <div>
@@ -45,25 +46,25 @@ export default function QuestionDisplay({
       </div>
 
       {question.type === 'single-choice' && (
-        <SingleChoice question={question} answer={answer} onAnswer={onAnswer} reviewMode={reviewMode} />
+        <SingleChoice question={question} answer={answer} onAnswer={onAnswer} reviewMode={reviewMode} showCorrect={showCorrect} />
       )}
       {question.type === 'multiple-choice' && (
-        <MultipleChoice question={question} answer={answer} onAnswer={onAnswer} reviewMode={reviewMode} />
+        <MultipleChoice question={question} answer={answer} onAnswer={onAnswer} reviewMode={reviewMode} showCorrect={showCorrect} />
       )}
       {question.type === 'drag-drop' && (
-        <DragDrop question={question} answer={answer} onAnswer={onAnswer} reviewMode={reviewMode} />
+        <DragDrop question={question} answer={answer} onAnswer={onAnswer} reviewMode={reviewMode} showCorrect={showCorrect} />
       )}
       {question.type === 'dropdown' && (
-        <Dropdown question={question} answer={answer} onAnswer={onAnswer} reviewMode={reviewMode} />
+        <Dropdown question={question} answer={answer} onAnswer={onAnswer} reviewMode={reviewMode} showCorrect={showCorrect} />
       )}
       {question.type === 'yes-no' && (
-        <YesNoStatements question={question} answer={answer} onAnswer={onAnswer} reviewMode={reviewMode} />
+        <YesNoStatements question={question} answer={answer} onAnswer={onAnswer} reviewMode={reviewMode} showCorrect={showCorrect} />
       )}
       {question.type === 'case-study' && (
-        <CaseStudy question={question} answer={answer} onAnswer={onAnswer} reviewMode={reviewMode} />
+        <CaseStudy question={question} answer={answer} onAnswer={onAnswer} reviewMode={reviewMode} showCorrect={showCorrect} showExplanation={showExplanation} />
       )}
 
-      {reviewMode && question.explanation && (
+      {(reviewMode || showExplanation) && question.explanation && (
         <div className="explanation-box">
           <strong>Explanation:</strong> {question.explanation}
           {learnLinks[question.bulletPoint] && (

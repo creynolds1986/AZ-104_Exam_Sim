@@ -6,9 +6,10 @@ interface Props {
   answer: string[] | null;
   onAnswer: (answer: string[]) => void;
   reviewMode: boolean;
+  showCorrect?: boolean;
 }
 
-export default function MultipleChoice({ question, answer, onAnswer, reviewMode }: Props) {
+export default function MultipleChoice({ question, answer, onAnswer, reviewMode, showCorrect }: Props) {
   const selected = answer || [];
   const letters = 'ABCDEFGH';
 
@@ -31,10 +32,8 @@ export default function MultipleChoice({ question, answer, onAnswer, reviewMode 
         {question.options.map((opt, i) => {
           let className = 'option-item';
           if (selected.includes(opt.id)) className += ' selected';
-          if (reviewMode) {
-            if (question.correctOptionIds.includes(opt.id)) className += ' correct';
-            else if (selected.includes(opt.id)) className += ' incorrect';
-          }
+          if ((reviewMode || (showCorrect && selected.length > 0)) && question.correctOptionIds.includes(opt.id)) className += ' correct';
+          else if ((reviewMode || (showCorrect && selected.length > 0)) && selected.includes(opt.id)) className += ' incorrect';
 
           return (
             <div key={opt.id} className={className} onClick={() => toggle(opt.id)}>

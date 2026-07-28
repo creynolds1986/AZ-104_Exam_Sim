@@ -7,9 +7,10 @@ interface Props {
   answer: Record<string, string> | null;
   onAnswer: (answer: Record<string, string>) => void;
   reviewMode: boolean;
+  showCorrect?: boolean;
 }
 
-export default function DragDrop({ question, answer, onAnswer, reviewMode }: Props) {
+export default function DragDrop({ question, answer, onAnswer, reviewMode, showCorrect }: Props) {
   const placements = answer || {};
   const [dragItem, setDragItem] = useState<string | null>(null);
   const [dragOverTarget, setDragOverTarget] = useState<string | null>(null);
@@ -71,11 +72,12 @@ export default function DragDrop({ question, answer, onAnswer, reviewMode }: Pro
 
             let targetClass = 'drop-target';
             if (isOver) targetClass += ' drag-over';
-            if (reviewMode && placedItemId) {
+            const showAnswer = reviewMode || (showCorrect && placedItemId);
+            if (showAnswer) {
               targetClass += placedItemId === target.correctItemId ? ' correct' : ' incorrect';
             }
 
-            const correctItem = reviewMode ? question.items.find(i => i.id === target.correctItemId) : null;
+            const correctItem = (reviewMode || showCorrect) ? question.items.find(i => i.id === target.correctItemId) : null;
 
             return (
               <div

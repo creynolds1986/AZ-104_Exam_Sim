@@ -3,7 +3,7 @@ import { Section } from '../types';
 
 interface Props {
   sections: Section[];
-  onStart: (sectionIds: string[], questionCount: number, timerEnabled: boolean, timerMinutes: number) => void;
+  onStart: (sectionIds: string[], questionCount: number, timerEnabled: boolean, timerMinutes: number, mode: 'practice' | 'certificate') => void;
 }
 
 export default function ExamSetup({ sections, onStart }: Props) {
@@ -13,6 +13,7 @@ export default function ExamSetup({ sections, onStart }: Props) {
   const [questionCount, setQuestionCount] = useState(50);
   const [timerEnabled, setTimerEnabled] = useState(true);
   const [timerMinutes, setTimerMinutes] = useState(150);
+  const [examMode, setExamMode] = useState<'practice' | 'certificate'>('certificate');
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
   const toggleSection = (id: string) => {
@@ -86,6 +87,32 @@ export default function ExamSetup({ sections, onStart }: Props) {
 
         <div className="exam-options">
           <div className="option-group">
+            <label>Exam Mode</label>
+            <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+              <label>
+                <input
+                  type="radio"
+                  name="exam-mode"
+                  value="practice"
+                  checked={examMode === 'practice'}
+                  onChange={() => setExamMode('practice')}
+                /> Practice
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="exam-mode"
+                  value="certificate"
+                  checked={examMode === 'certificate'}
+                  onChange={() => setExamMode('certificate')}
+                /> Certificate
+              </label>
+            </div>
+            <p style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 8 }}>
+              Practice mode shows answers and explanations as you go. Certificate mode simulates a real exam with no immediate feedback.
+            </p>
+          </div>
+          <div className="option-group">
             <label>Number of Questions</label>
             <select value={questionCount} onChange={e => setQuestionCount(Number(e.target.value))}>
               <option value={10}>10 (Quick Practice)</option>
@@ -125,7 +152,7 @@ export default function ExamSetup({ sections, onStart }: Props) {
         <button
           className="start-btn"
           disabled={selectedSections.size === 0}
-          onClick={() => onStart([...selectedSections], questionCount, timerEnabled, timerMinutes)}
+          onClick={() => onStart([...selectedSections], questionCount, timerEnabled, timerMinutes, examMode)}
         >
           {selectedSections.size === 0
             ? 'Select at least one section'

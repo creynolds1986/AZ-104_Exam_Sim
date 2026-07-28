@@ -6,9 +6,10 @@ interface Props {
   answer: Record<string, string> | null;
   onAnswer: (answer: Record<string, string>) => void;
   reviewMode: boolean;
+  showCorrect?: boolean;
 }
 
-export default function Dropdown({ question, answer, onAnswer, reviewMode }: Props) {
+export default function Dropdown({ question, answer, onAnswer, reviewMode, showCorrect }: Props) {
   const selections = answer || {};
 
   const handleChange = (dropdownId: string, value: string) => {
@@ -26,8 +27,10 @@ export default function Dropdown({ question, answer, onAnswer, reviewMode }: Pro
           }
           const selected = selections[seg.id] || '';
           let selectClass = '';
-          if (reviewMode) {
-            selectClass = selected === seg.correctOption ? 'correct' : 'incorrect';
+          if ((reviewMode || (showCorrect && selected !== '')) && selected === seg.correctOption) {
+            selectClass = 'correct';
+          } else if ((reviewMode || (showCorrect && selected !== '')) && selected !== seg.correctOption) {
+            selectClass = 'incorrect';
           }
 
           return (
